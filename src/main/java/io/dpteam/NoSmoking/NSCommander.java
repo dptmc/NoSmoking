@@ -8,10 +8,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class NSCommander implements CommandExecutor {
-	NoSmoking plg;
+	Main plg;
 	String spx;
 
-	NSCommander(NoSmoking plg) {
+	NSCommander(Main plg) {
 		super();
 		this.plg = plg;
 		this.spx = plg.spx;

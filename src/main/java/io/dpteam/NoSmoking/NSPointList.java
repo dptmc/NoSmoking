@@ -15,14 +15,14 @@ import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class NSPointList {
-	NoSmoking plg;
+	Main plg;
 	Random rnd = new Random();
 	ArrayList PList = new ArrayList();
 	protected BufferedReader rdr;
 	protected BufferedWriter wtr;
 	Logger log = Logger.getLogger("Minecraft");
 
-	public NSPointList(NoSmoking plg) {
+	public NSPointList(Main plg) {
 		super();
 		this.plg = plg;
 	}
@@ -243,7 +243,7 @@ public class NSPointList {
 						String tid = "";
 						String wname = "";
 						int e = 0;
-						int d = true;
+						int d = 1; // WORKER: true
 						int r = 1;
 						String crname = "";
 						boolean shp = true;
@@ -251,14 +251,14 @@ public class NSPointList {
 						int y;
 						int z;
 						SmokePoint sp;
-						int d;
+						int d2;
 						if (items.length == 7) {
 							tid = items[0];
 							wname = items[1];
 							x = (int)Double.parseDouble(items[2]);
 							y = (int)Double.parseDouble(items[3]);
 							z = (int)Double.parseDouble(items[4]);
-							d = this.plg.ParseDirection(items[5]);
+							d2 = this.plg.ParseDirection(items[5]);
 							crname = items[6];
 							sp = new SmokePoint(tid, wname, x, y, z, e, d, r, crname, shp);
 							this.PList.add(sp);
@@ -268,12 +268,12 @@ public class NSPointList {
 							x = Integer.parseInt(items[2]);
 							y = Integer.parseInt(items[3]);
 							z = Integer.parseInt(items[4]);
-							int e = Integer.parseInt(items[5]);
-							d = Integer.parseInt(items[6]);
-							int r = Integer.parseInt(items[7]);
+							int e2 = Integer.parseInt(items[5]);
+							d2 = Integer.parseInt(items[6]);
+							int r2 = Integer.parseInt(items[7]);
 							crname = items[8];
 							shp = Boolean.parseBoolean(items[9]);
-							sp = new SmokePoint(tid, wname, x, y, z, e, d, r, crname, shp);
+							sp = new SmokePoint(tid, wname, x, y, z, e2, d2, r2, crname, shp);
 							this.PList.add(sp);
 						}
 					}

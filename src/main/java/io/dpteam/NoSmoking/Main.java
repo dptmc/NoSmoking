@@ -6,7 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
-import net.minecraft.server.v1_16_R3.ChunkPosition;
+import com.comphenix.protocol.wrappers.ChunkPosition;
+import net.minecraft.server.v1_16_R3.EntityHuman;
 import net.minecraft.server.v1_16_R3.PacketPlayOutExplosion;
 import net.minecraft.server.v1_16_R3.Vec3D;
 import org.bukkit.Bukkit;
@@ -14,6 +15,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.command.Command;
 import org.bukkit.craftbukkit.v1_16_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftEnderSignal;
@@ -21,6 +23,7 @@ import org.bukkit.entity.EnderSignal;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -69,6 +72,7 @@ public class Main extends JavaPlugin {
 	NSCommander Commander;
 	NSListener l;
 	NSUtil u;
+	private Vec3D vec3D;
 
 	public Main() {
 		super();
@@ -377,8 +381,11 @@ public class Main extends JavaPlugin {
 			break;
 		case 9:
 			this.FillExplosionBlocks(loc, 5);
-			Vec3D v = Vec3D.a(0.0D, 0.0D, 0.0D);
-			((CraftServer)Bukkit.getServer()).getHandle().sendPacketNearby(loc.getX(), loc.getY(), loc.getZ(), 64.0D, ((CraftWorld)loc.getWorld()).getHandle().dimension, new PacketPlayOutExplosion(loc.getX(), loc.getY(), loc.getZ(), this.expl_f, this.expl_blocks, v));
+			this.vec3D = new Vec3D( 0.0D,  0.0D,  0.0D);
+			((CraftServer)Bukkit.getServer()).getHandle().sendPacketNearby(null, loc.getX(), loc.getY(), loc.getZ(), 64.0D, ((CraftWorld)loc.getWorld()).getHandle().getDimensionKey(), new PacketPlayOutExplosion(loc.getX(), loc.getY(), loc.getZ(), this.expl_f, this.expl_blocks, vec3D));
+			break;
+			default:
+				throw new IllegalStateException("Unexpected value: " + cursmoke.effect_type);
 		}
 
 	}
@@ -606,7 +613,7 @@ public class Main extends JavaPlugin {
 	public void FillPlayList() {
 		boolean incl = false;
 		this.playlist.clear();
-		Player[] players = Bukkit.getServer().getOnlinePlayers();
+		Player[] players = Bukkit.getServer().getOnlinePlayers().toArray(new Player[0]);
 		if (this.smog.PList.size() > 0 && players.length > 0) {
 			for(int i = 0; i < this.smog.PList.size(); ++i) {
 				incl = false;

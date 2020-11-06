@@ -1,6 +1,8 @@
 package io.dpteam.NoSmoking;
 
 import java.util.HashSet;
+
+import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,11 +20,13 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class NSListener implements Listener {
-	NoSmoking plg;
+	Main plg;
+	private int itemStack;
 
-	public NSListener(NoSmoking plg) {
+	public NSListener(Main plg) {
 		super();
 		this.plg = plg;
 	}
@@ -59,7 +63,8 @@ public class NSListener implements Listener {
 	)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		Player p = event.getPlayer();
-		if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && this.plg.CheckPerm(p, "no-smoking.smoke") && this.plg.pcfg.containsKey(p.getName()) && ((PlayerSettings)this.plg.pcfg.get(p.getName())).mode && p.getItemInHand().getTypeId() == this.plg.wand) {
+		itemStack = NumberUtils.toInt(String.valueOf(p.getInventory().getItemInMainHand()));
+		if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && this.plg.CheckPerm(p, "no-smoking.smoke") && this.plg.pcfg.containsKey(p.getName()) && ((PlayerSettings)this.plg.pcfg.get(p.getName())).mode && itemStack == this.plg.wand) {
 			Location loc = p.getTargetBlock((HashSet)null, 150).getLocation();
 			if (loc.getBlockY() < loc.getWorld().getMaxHeight() - 2) {
 				loc.setY(loc.getY() + 1.0D);
@@ -108,7 +113,7 @@ public class NSListener implements Listener {
 	)
 	public void onBlockRedstoneChange(BlockRedstoneEvent event) {
 		Block b = event.getBlock();
-		if (b.getType() == Material.SIGN_POST || b.getType() == Material.WALL_SIGN) {
+		if (b.getType() == Material.LEGACY_SIGN_POST || b.getType() == Material.LEGACY_WALL_SIGN) {
 			BlockState state = b.getState();
 			if (state instanceof Sign) {
 				Sign sign = (Sign)state;

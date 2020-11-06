@@ -37,6 +37,8 @@ import org.bukkit.scheduler.BukkitTask;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+import org.bukkit.material.*;
+import org.bukkit.inventory.*;
 
 public abstract class FGUtilCore {
 	JavaPlugin plg;
@@ -348,13 +350,13 @@ public abstract class FGUtilCore {
 				}
 			}
 
-			return this.compareItemStrIgnoreName(item.getTypeId(), item.getDurability(), item.getAmount(), itemstr);
+			return this.compareItemStrIgnoreName(item.getType().getId(), item.getDurability(), item.getAmount(), itemstr);
 		}
 	}
 
 	public boolean compareItemStrIgnoreName(int item_id, int item_data, int item_amount, String itemstr) {
 		if (!itemstr.isEmpty()) {
-			int id = true;
+			int id = 1;
 			int amount = 1;
 			int data = -1;
 			String[] si = itemstr.split("\\*");
@@ -365,7 +367,6 @@ public abstract class FGUtilCore {
 
 				String[] ti = si[0].split(":");
 				if (ti.length > 0) {
-					int id;
 					if (ti[0].matches("[0-9]*")) {
 						id = Integer.parseInt(ti[0]);
 					} else {
@@ -466,7 +467,7 @@ public abstract class FGUtilCore {
 				} else {
 					for(int i = 0; i < inv.getContents().length; ++i) {
 						ItemStack slot = inv.getItem(i);
-						if (slot != null && this.compareItemName(slot, name) && id == slot.getTypeId() && (data <= 0 || data == slot.getDurability())) {
+						if (slot != null && this.compareItemName(slot, name) && id == slot.getType().getId() && (data <= 0 || data == slot.getDurability())) {
 							int slotamount = slot.getAmount();
 							if (slotamount != 0) {
 								if (slotamount <= left) {
@@ -531,7 +532,7 @@ public abstract class FGUtilCore {
 
 				for(int var11 = 0; var11 < var12; ++var11) {
 					ItemStack slot = var13[var11];
-					if (slot != null && this.compareItemName(slot, name) && id == slot.getTypeId() && (data < 0 || data == slot.getDurability())) {
+					if (slot != null && this.compareItemName(slot, name) && id == slot.getType().getId() && (data < 0 || data == slot.getDurability())) {
 						count += slot.getAmount();
 					}
 				}
@@ -543,7 +544,7 @@ public abstract class FGUtilCore {
 
 	public boolean removeItemInHand(Player p, String itemstr) {
 		if (!itemstr.isEmpty()) {
-			int id = true;
+			int id;
 			int amount = 1;
 			int data = -1;
 			String[] si = itemstr.split("\\*");
@@ -554,7 +555,6 @@ public abstract class FGUtilCore {
 
 				String[] ti = si[0].split(":");
 				if (ti.length > 0) {
-					int id;
 					if (ti[0].matches("[0-9]*")) {
 						id = Integer.parseInt(ti[0]);
 					} else {
@@ -574,7 +574,7 @@ public abstract class FGUtilCore {
 	}
 
 	public boolean removeItemInHand(Player p, int item_id, int item_data, int item_amount) {
-		if (p.getItemInHand() != null && p.getItemInHand().getTypeId() == item_id && p.getItemInHand().getAmount() >= item_amount && (item_data < 0 || item_data == p.getItemInHand().getDurability())) {
+		if (p.getItemInHand() != null && p.getItemInHand().getType().getId() == item_id && p.getItemInHand().getAmount() >= item_amount && (item_data < 0 || item_data == p.getItemInHand().getDurability())) {
 			if (p.getItemInHand().getAmount() > item_amount) {
 				p.getItemInHand().setAmount(p.getItemInHand().getAmount() - item_amount);
 			} else {
@@ -616,7 +616,7 @@ public abstract class FGUtilCore {
 
 	public void broadcastMSG(String perm, Object... s) {
 		Player[] var6;
-		int var5 = (var6 = Bukkit.getOnlinePlayers()).length;
+		int var5 = (var6 = Bukkit.getOnlinePlayers().toArray(new Player[0])).length;
 
 		for(int var4 = 0; var4 < var5; ++var4) {
 			Player p = var6[var4];
@@ -629,7 +629,7 @@ public abstract class FGUtilCore {
 
 	public void broadcastMsg(String perm, String msg) {
 		Player[] var6;
-		int var5 = (var6 = Bukkit.getOnlinePlayers()).length;
+		int var5 = (var6 = Bukkit.getOnlinePlayers().toArray(new Player[0])).length;
 
 		for(int var4 = 0; var4 < var5; ++var4) {
 			Player p = var6[var4];
@@ -664,7 +664,7 @@ public abstract class FGUtilCore {
 			} else {
 				InputStream is = this.plg.getClass().getResourceAsStream("/language/" + this.language + ".lng");
 				if (is != null) {
-					this.lng.load(is);
+					this.lng.load(String.valueOf(is));
 				}
 			}
 		} catch (Exception var3) {
@@ -845,7 +845,6 @@ public abstract class FGUtilCore {
 				istr = istr.substring(0, istr.indexOf("@"));
 			}
 
-			int id = true;
 			int amount = 1;
 			short data = 0;
 			String[] si = istr.split("\\*");
@@ -873,7 +872,7 @@ public abstract class FGUtilCore {
 						data = Short.parseShort(ti[1]);
 					}
 
-					ItemStack item = new ItemStack(id, amount, data);
+					ItemStack item = new ItemStack(null, amount, data);
 					if (!enchant.isEmpty()) {
 						item = this.setEnchantments(item, enchant);
 					}
@@ -906,7 +905,7 @@ public abstract class FGUtilCore {
 				if (!ec.isEmpty()) {
 					Color clr = this.colorByName(ec);
 					if (clr != null) {
-						if (this.isIdInList(item.getTypeId(), "298,299,300,301")) {
+						if (this.isIdInList(item.getType().getId(), "298,299,300,301")) {
 							LeatherArmorMeta meta = (LeatherArmorMeta)i.getItemMeta();
 							meta.setColor(clr);
 							i.setItemMeta(meta);
@@ -967,7 +966,7 @@ public abstract class FGUtilCore {
 
 	public boolean placeBlock(Block block, Player p, Material newType, byte newData, boolean phys) {
 		BlockState state = block.getState();
-		block.setTypeIdAndData(newType.getId(), newData, phys);
+
 		BlockPlaceEvent event = new BlockPlaceEvent(state.getBlock(), state, block, p.getItemInHand(), p, true);
 		this.plg.getServer().getPluginManager().callEvent(event);
 		if (event.isCancelled()) {
@@ -1103,7 +1102,7 @@ label32:
 
 	public int getMinMaxRandom(String minmaxstr) {
 		int min = 0;
-		int max = false;
+		int max = 0;
 		String strmin = minmaxstr;
 		String strmax = minmaxstr;
 		if (minmaxstr.contains("-")) {
@@ -1115,9 +1114,9 @@ label32:
 			min = Integer.parseInt(strmin);
 		}
 
-		int max = min;
+		int max2 = min;
 		if (strmax.matches("[1-9]+[0-9]*")) {
-			max = Integer.parseInt(strmax);
+			max2 = Integer.parseInt(strmax);
 		}
 
 		return max > min ? min + this.tryChance(1 + max - min) : min;

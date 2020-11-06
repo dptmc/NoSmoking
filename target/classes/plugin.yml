@@ -1,0 +1,12 @@
+name: NoSmoking
+version: 1.0.0-SNAPSHOT-@apiversion@
+description: NoSmoking
+authors: [ DartPower, fromgate ]
+website: https://github.com/dptmc/NoSmoking
+main: io.dpteam.NoSmoking.Main
+
+commands:
+   smoke:
+      description: No smoking plugin configuration command
+      usage: 
+           /smoke help
