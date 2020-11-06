@@ -70,7 +70,7 @@ public class Main extends JavaPlugin {
 	NSListener l;
 	NSUtil u;
 
-	public NoSmoking() {
+	public Main() {
 		super();
 		this.spx = ChatColor.AQUA + "[NS]: " + ChatColor.WHITE;
 		this.wind = 4;
@@ -711,17 +711,17 @@ public class Main extends JavaPlugin {
 
 		this.fid = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
 			public void run() {
-				NoSmoking.this.FillPlayList();
+				Main.this.FillPlayList();
 			}
 		}, 30L, this.plfltick);
 		this.tid = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
 			public void run() {
-				NoSmoking.this.Tick();
+				Main.this.Tick();
 			}
 		}, 30L, this.ticktime);
 		this.wid = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
 			public void run() {
-				NoSmoking.this.Wind();
+				Main.this.Wind();
 			}
 		}, 60L, this.windtick);
 	}
