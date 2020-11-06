@@ -1,6 +1,12 @@
-name: PluginName
+name: NoSmoking
 version: @version@-@apiversion@
-description: An empty plugin for Spigot with Maven
-authors: [ DartPower, AnotherContributorName ]
-website: https://github.com/dptmc/DPT-PluginRepoTemplate
-main: io.dpteam.PluginName.Main
+description: NoSmoking
+authors: [ DartPower, fromgate ]
+website: https://github.com/dptmc/NoSmoking
+main: io.dpteam.NoSmoking.Main
+
+commands:
+   smoke:
+      description: No smoking plugin configuration command
+      usage: 
+           /smoke help
